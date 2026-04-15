@@ -318,29 +318,15 @@
       const category = document.getElementById("category").value;
       const comment  = document.getElementById("comment").value;
 
-      // Googleフォームへhidden iframeで送信（ページ遷移なし）
-      const form = document.createElement("form");
-      form.method = "POST";
-      form.action = GOOGLE_FORM_ACTION;
-      form.target = "hidden_iframe";
-      form.style.display = "none";
+      const body = new FormData();
+      body.append(ENTRY.category, category);
+      body.append(ENTRY.comment,  comment);
 
-      const fields = [
-        { name: ENTRY.category, value: category },
-        { name: ENTRY.comment,  value: comment  },
-      ];
-
-      fields.forEach(f => {
-        const input = document.createElement("input");
-        input.type  = "hidden";
-        input.name  = f.name;
-        input.value = f.value;
-        form.appendChild(input);
+      fetch(GOOGLE_FORM_ACTION, {
+        method: "POST",
+        mode: "no-cors",
+        body: body
       });
-
-      document.body.appendChild(form);
-      form.submit();
-      document.body.removeChild(form);
 
       document.getElementById("form-area").style.display = "none";
       document.getElementById("success-msg").style.display = "block";
@@ -356,7 +342,5 @@
     }
   </script>
 
-  <!-- Googleフォーム送信用の非表示iframe -->
-  <iframe name="hidden_iframe" style="display:none;"></iframe>
 </body>
 </html>
